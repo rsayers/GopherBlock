@@ -52,3 +52,10 @@ Mounted procs are called in the order they were defined,  so if you define the s
 proc name, then it will be mounted as the root directory.
 
 There is however a path limitation,  proc names must be defined as root items.  You can create a procedure for /test, but not /test/app.
+
+A complete example of a basic gopher server:
+    require 'gopherblock'
+    server=GopherBlock.new({ :host => 'gopher.robsayers.com', :dir => '/home/rsayers/gopher' })
+    server.start
+
+This is the code running my own personal server.  It handles executables just fine, and renders gophermaps properly

@@ -23,9 +23,10 @@ end
 
 class GopherBlock
   def initialize(conf={})
-    @port = conf[:port] || 70
+    puts conf
+    @port = conf[:port] || "70"
     @dir = conf[:dir] || "."
-    @host = conf[:host] || `hostname`.chomp
+    @host = conf[:host] || "localhost"
     @procs = {}    
     @client_addr=''
   end
@@ -35,8 +36,11 @@ class GopherBlock
   end
 
   def log(msg,*extra)
-    #time = Time.now.strftime("%d%b%Y:%H:%M:%S -0600")
-    #File.open(@logfile,"a").puts("#{@client_addr} - - [#{time}] \"#{msg}\" #{extra.join(' ')}")
+    
+    time = Time.now.strftime("%d%b%Y:%H:%M:%S -0600")
+    puts("#{@client_addr} - - [#{time}] \"#{msg}\" #{extra.join(' ')}")
+    return if !@logfile
+    File.open(@logfile,"a").puts("#{@client_addr} - - [#{time}] \"#{msg}\" #{extra.join(' ')}")
   end
   
   def handle_request(url)
@@ -174,6 +178,11 @@ end
   
   def start
     server = TCPServer.new(@port)
+    puts "Initilizing GopherBlock server"
+    puts "Mounting dir: #{@dir}"
+    puts "Hostname: #{@host}"
+    puts "Port#: #{@port}"
+
     while (session = server.accept)
       @client_addr = session.peeraddr.last
       session.puts handle_request(session.readline.chop)
@@ -183,19 +192,3 @@ end
   end
 end
 
-Server=GopherBlock.new( { :host => 'localhost' } )
-
-
-def hole(name="__ROOT__",*args,&block)
-  Server.mount_proc (name) do |url, args, params|
-    @params = params
-    block.call(*args)
-  end
-end
-
-hole "test", [:foo, :bar] do |foo, bar|
-  @params
-end
-
-
-Server.start
