@@ -5,6 +5,11 @@ GopherBlock (a play on the name WebBrick) is a toolkit for creating gopher appli
 
 It can happily run as a plain gopher server, serving up files and directories, or you can use it to build dynamic applications over the gopher protocol
 
+Warning
+-------
+This is still very much in development, don't assume anything will work
+
+
 Examples
 --------
 
